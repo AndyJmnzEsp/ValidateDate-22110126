@@ -10,9 +10,11 @@ private:
 	int Day;
 	int Month;
 	int Year;
+	char dateCS[11];
 
 public:
-	DateC() {}
+	DateC() {
+	}
 
 	void Split(char dateCS[11]) {
 		char* dateP;
@@ -20,8 +22,7 @@ public:
 		char* next_token = NULL;
 
 		dateP = strtok_s(dateCS, seps, &next_token);
-		string
-			year, month, day;
+		string year, month, day;
 		int i = 0;
 		while (dateP != NULL) {
 			if (i == 0) {
@@ -37,25 +38,15 @@ public:
 
 			dateP = strtok_s(NULL, seps, &next_token);
 		}
-
-		//ahora cambiarlo a int
 		ParseToInt(year, month, day);
-
-
-
-		/*cout << year << endl;
-		cout << month << endl;
-		cout << day << endl;*/
-
 	}
 
-	void ParseToInt(string year, string month, string day) {
-		int dayI = 0; int monthI = 0; int yearI = 0;
+	void ParseToInt(string yearPTI, string monthPTI, string dayPTI) {
 		int contadorY = 0; int contadorM = 0; int contadorD = 0;
 		bool okey = true;
 
-		for (int i = 0; i < year.length(); i++) {
-			if (year[i] < 48 || year[i] > 57) {
+		for (int i = 0; i < yearPTI.length(); i++) {
+			if (yearPTI[i] < 48 || yearPTI[i] > 57) {
 				okey = false;
 				cout << "Invalid Date. Sorry.\n";
 				break;
@@ -65,8 +56,8 @@ public:
 			}
 		}
 		if (okey = true) {
-			for (int i = 0; i < month.length(); i++) {
-				if (month[i] < 48 || month[i] > 57) {
+			for (int i = 0; i < monthPTI.length(); i++) {
+				if (monthPTI[i] < 48 || monthPTI[i] > 57) {
 					cout << "Invalid Date. Sorry.\n";
 					okey = false;
 					break;
@@ -76,8 +67,8 @@ public:
 				}
 			}
 			if (okey = true) {
-				for (int i = 0; i < day.length(); i++) {
-					if (day[i] < 48 || day[i] > 57) {
+				for (int i = 0; i < dayPTI.length(); i++) {
+					if (dayPTI[i] < 48 || dayPTI[i] > 57) {
 						cout << "Invalid Date. Sorry.\n";
 						okey = false;
 						break;
@@ -88,17 +79,87 @@ public:
 				}
 				if (okey = true) {
 					//validaaaaar
-					cout << "a validar";
+					Year = stoi(yearPTI);
+					Month = stoi(monthPTI);
+					Day = stoi(dayPTI);
+					ValidateYear();
+
 				}
 			}
 		}
-
-		
-		
-
-
 	}
 
+	void ValidateYear() {
+		if (Year % 4 == 0 && Year % 100 != 0 || Year % 400 == 0) {
+			//cout << "El año es biciesto\n";
+			ValidateMonthLY();
+		}
+		else {
+			//cout << "no es año biciesto";
+			ValidateMonth();
+		}
 
+	}
+	void ValidateMonthLY() {
+		if (Month < 1 || Month >= 13) {
+			cout << "Invalid Date. Sorry.\n";
+			//revisar que el mes corresponda
+		}
+		else {
+			if (Month == 2) {
+				//mes con 29 dias
+				ValidateDayOfMonthLY();
+			}
+			else if (Month == 1 || Month == 3 || Month == 5 || Month == 7 || Month == 8 || Month == 10 || Month == 12) {
+				//meses con 31 dias
+				ValidateMonths31();
+			}
+			else if (Month == 4 || Month == 6 || Month == 9 || Month == 11 ) {
+				//meses con 30 dias
+				ValidateMonths30();
 
+			}
+		}
+	}
+	void ValidateMonth() {
+		cout << Month << endl;
+		if (Month  < 1 || Month >= 13) {
+			cout << "Invalid Date.\n";
+		}
+		else {
+			if (Month == 2) {
+				//mes con 28 dias
+				ValidateDayOfMonth();
+			}
+			else if (Month == 1 || Month == 3 || Month == 5 || Month == 7 || Month == 8 || Month == 10 || Month == 12) {
+				//meses con 31 dias
+				ValidateMonths31();
+			}
+			else if (Month == 4 || Month == 6 || Month == 9 || Month == 11) {
+				//meses con 30 dias
+				ValidateMonths30();
+
+			}
+		}
+	}
+	void ValidateDayOfMonthLY() {
+		if (Day < 1 || Day > 29) {
+			cout << "Invalid Date.\n";
+		}
+	}
+	void ValidateDayOfMonth() {
+		if (Day < 1 || Day > 28) {
+			cout << "Invalid Date.\n";
+		}
+	}
+	void ValidateMonths31() {
+		if (Day < 1 || Day > 31) {
+			cout << "Invalid Date.\n";
+		}
+	}
+	void ValidateMonths30() {
+		if (Day < 1 || Day > 30) {
+			cout << "Invalid Date.\n";
+		}
+	}
 };
